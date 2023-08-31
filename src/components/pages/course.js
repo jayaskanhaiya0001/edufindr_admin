@@ -5,6 +5,7 @@ export const Course = () => {
     const [AllCourses, setAllCourses] = useState([]);
     const [teachers, setTeachers] = useState([])
     const [inputs, setInputs] = useState({ add: false, update: false })
+    const [id, setId] = useState('')
     const getCoursessData = async () => {
         try {
             const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllcourses')
@@ -49,6 +50,7 @@ export const Course = () => {
         getCoursessData()
         getTeachersData()
     }, []);
+
     return (
         <>
 
@@ -64,7 +66,7 @@ export const Course = () => {
                                         <h1>{data?.title}</h1>
                                         <h3>{data?.Exam}</h3>
                                         <p>{data?.about}</p>
-                                        <button>Update</button>
+                                        <button onClick={async () => setId(data?._id)}>Update</button>
                                         <button onClick={() => DeleteCourse(data?._id)}>Delete</button>
                                     </div>
                                 </>
@@ -72,18 +74,18 @@ export const Course = () => {
                         })
                     }
                 </div>
-                
-                    <CourseForm teachers={teachers} />
-                
+
+                <CourseForm teachers={teachers} AllCourses={AllCourses} id={id} />
+
             </div>
         </>
     )
 }
 
 
-const CourseForm = ({ teachers }) => {
+const CourseForm = ({ teachers, AllCourses, id }) => {
     const [courseInput, setCourseInput] = useState({
-        image:"",
+        image: "",
         mentorNames: [
             {
                 _id: "",
@@ -100,7 +102,7 @@ const CourseForm = ({ teachers }) => {
         language: "",
         about: "",
         highlights: [
-            
+
         ],
         enrollmentEndDate: "2023-08-15",
         days: [
@@ -134,44 +136,51 @@ const CourseForm = ({ teachers }) => {
         Exam: ""
     })
     const getTeacherIdHandle = (id) => {
-        let [{name, _id}]  =  teachers?.filter((data) => data?._id === id && data);
-        setCourseInput({ ...courseInput, mentorNames: [{_id: _id , name: name}] })
+        let [{ name, _id }] = teachers?.filter((data) => data?._id === id && data);
+        setCourseInput({ ...courseInput, mentorNames: [{ _id: _id, name: name }] })
     }
-    const addCourse = async () => {
+    const handleCourse = async (method) => {
         try {
-            let res = await axios.post('https://courseselling.onrender.com/api/v1/createCourse',courseInput)
-            if(res) {
+            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateCourse/${id}`, courseInput) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, courseInput);
+            if (res) {
                 console.log(res)
             }
-        } catch(err) {
+        } catch (err) {
             console.log(err)
         }
 
     }
+    useEffect(()=>{
+        const updateCourse = AllCourses?.filter((data) => data?._id === id);
+        if(updateCourse) {
+            setCourseInput(updateCourse[0])
+        }
+    },[id])
+  
     return (
         <>
-      
-                <select onChange={(e) => {getTeacherIdHandle(e.target.value);}}>
-                    {teachers?.map((data) => {
-                        return (
-                            <>
-                                <option value={data?._id}>{data?.name}</option>
-                            </>
-                        )
-                    })}
-                </select>
-                <input placeholder="courseDuration" onChange={(e) => {setCourseInput({...courseInput , courseDuration: e.target.value})}} value={courseInput?.courseDuration}/>
-                <input placeholder="title" onChange={(e) => {setCourseInput({...courseInput , title: e.target.value})}} value={courseInput?.title}/>
-                <input placeholder="alreadyEnrolled" onChange={(e) => {setCourseInput({...courseInput , alreadyEnrolled: e.target.value})}} value={courseInput?.alreadyEnrolled}/>
-                <input placeholder="price" onChange={(e) => {setCourseInput({...courseInput , price: e.target.value})}} value={courseInput?.price}/>
-                <input placeholder="rating" onChange={(e) => {setCourseInput({...courseInput , rating: e.target.value})}} value={courseInput?.rating}/>
-                <input placeholder="batchStarting" onChange={(e) => {setCourseInput({...courseInput , batchStarting: e.target.value})}} value={courseInput?.batchStarting}/>
-                <input placeholder="institute" onChange={(e) => {setCourseInput({...courseInput , institute: e.target.value})}} value={courseInput?.institute}/>
-                <input placeholder="language" onChange={(e) => {setCourseInput({...courseInput , language: e.target.value})}} value={courseInput?.language}/>
-                <input placeholder="about" onChange={(e) => {setCourseInput({...courseInput , about: e.target.value})}} value={courseInput?.about}/>
-                <input placeholder="category" onChange={(e) => {setCourseInput({...courseInput , category: e.target.value})}} value={courseInput?.category}/>
-                <input placeholder="Exam" onChange={(e) => {setCourseInput({...courseInput , Exam: e.target.value})}} value={courseInput?.Exam}/>
-                <button onClick={async () => {await addCourse()} }>Add Course</button>
+
+            <select onChange={(e) => { getTeacherIdHandle(e.target.value); }}>
+                {teachers?.map((data) => {
+                    return (
+                        <>
+                            <option value={data?._id}>{data?.name}</option>
+                        </>
+                    )
+                })}
+            </select>
+            <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
+            <input placeholder="title" onChange={(e) => { setCourseInput({ ...courseInput, title: e.target.value }) }} value={courseInput?.title} />
+            <input placeholder="alreadyEnrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
+            <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} />
+            <input placeholder="rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} />
+            <input placeholder="batchStarting" onChange={(e) => { setCourseInput({ ...courseInput, batchStarting: e.target.value }) }} value={courseInput?.batchStarting} />
+            <input placeholder="institute" onChange={(e) => { setCourseInput({ ...courseInput, institute: e.target.value }) }} value={courseInput?.institute} />
+            <input placeholder="language" onChange={(e) => { setCourseInput({ ...courseInput, language: e.target.value }) }} value={courseInput?.language} />
+            <input placeholder="about" onChange={(e) => { setCourseInput({ ...courseInput, about: e.target.value }) }} value={courseInput?.about} />
+            <input placeholder="category" onChange={(e) => { setCourseInput({ ...courseInput, category: e.target.value }) }} value={courseInput?.category} />
+            <input placeholder="Exam" onChange={(e) => { setCourseInput({ ...courseInput, Exam: e.target.value }) }} value={courseInput?.Exam} />
+            {!id ? <button onClick={async () => { await handleCourse('') }}>Add Course</button> : <button onClick={async () => { await handleCourse('PUT') }}>Add Course</button>}
 
         </>
     )

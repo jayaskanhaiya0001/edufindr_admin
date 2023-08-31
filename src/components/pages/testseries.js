@@ -3,6 +3,7 @@ import { AddItem } from "../common/Placeholder/add";
 import { useEffect, useState } from "react";
 export const TestSeries = () => {
     const [testSeries, setAllTestSeries] = useState([])
+    const [id, setId] = useState('')
     const getAllTestSeries = async () => {
         try {
             const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllTest')
@@ -24,10 +25,13 @@ export const TestSeries = () => {
             console.log(err)
         }
     }
-    return (
+    const inputHandle = (params) => {
+
+    }
+    return ( 
         <>
             <div>
-                <AddItem />
+                <AddItem inputHandle={inputHandle}/>
                 <div className="Grid-Box">
                     {
                         testSeries?.map((data, index) => {
@@ -38,7 +42,7 @@ export const TestSeries = () => {
                                         <h1>{data?.title}</h1>
                                         <h3>{data?.Exam}</h3>
                                         <p>{data?.about}</p>
-                                        <button>Update</button>
+                                        <button onClick={async () => setId(data?._id)}>Update</button>
                                         <button onClick={() => DeleteTestSeries(data?._id)}>Delete</button>
                                     </div>
                                 </>
@@ -46,15 +50,15 @@ export const TestSeries = () => {
                         })
                     }
                 </div>
-
+                <TestSeriesForm id={id} testSeries={testSeries}/>
             </div>
         </>
     )
 }
 
-const TestSeriesForm = () => {
+const TestSeriesForm = ({id , testSeries}) => {
     const [testSeriesInput, setTestSeriesInput] = useState({
-        totalTest: null,
+        totalTest: "",
         freeTest: "",
         title: "",
         alreadyEnrolled: null,
@@ -88,9 +92,9 @@ const TestSeriesForm = () => {
         createdAt: "2023-08-22T12:00:00Z",
         updatedAt: "2023-08-22T14:30:00Z"
       })
-    const addTestSEries = async () => {
+    const addTestSEries = async (method) => {
         try {
-            let res = await axios.post('https://courseselling.onrender.com/api/v1/createTest',testSeriesInput)
+            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateTest/${id}`, testSeriesInput) : await axios.post(`https://courseselling.onrender.com/api/v1/createTest`, testSeriesInput);
             if(res) {
                 console.log(res)
             }
@@ -99,20 +103,27 @@ const TestSeriesForm = () => {
         }
 
     }
+    useEffect(()=>{
+        const updateTestSeries = testSeries?.filter((data) => data?._id === id);
+        console.log(updateTestSeries , "updateTestSeries")
+        if(updateTestSeries) {
+            setTestSeriesInput(updateTestSeries[0])
+        }
+    },[id])
     return (
         <>
-                <input placeholder="totalTest" onChange={(e) => {setTestSeriesInput({...testSeriesInput , totalTest: e.target.value})}}/>
-                <input placeholder="freeTest" onChange={(e) => {setTestSeriesInput({...testSeriesInput , freeTest: e.target.value})}}/>
-                <input placeholder="title" onChange={(e) => {setTestSeriesInput({...testSeriesInput , title: e.target.value})}}/>
-                <input placeholder="price" onChange={(e) => {setTestSeriesInput({...testSeriesInput , price: e.target.value})}}/>
-                <input placeholder="alreadyEnrolled" onChange={(e) => {setTestSeriesInput({...testSeriesInput , alreadyEnrolled: e.target.value})}}/>
-                <input placeholder="rating" onChange={(e) => {setTestSeriesInput({...testSeriesInput , rating: e.target.value})}}/>
-                <input placeholder="createdAt" type="date" onChange={(e) => {setTestSeriesInput({...testSeriesInput , createdAt: e.target.value})}}/>
-                <input placeholder="updatedAt" type="date" onChange={(e) => {setTestSeriesInput({...testSeriesInput , updatedAt: e.target.value})}}/>
-                <input placeholder="about" onChange={(e) => {setTestSeriesInput({...testSeriesInput , about: e.target.value})}}/>
-                <input placeholder="category" onChange={(e) => {setTestSeriesInput({...testSeriesInput , category: e.target.value})}}/>
-                <input placeholder="Exam" onChange={(e) => {setTestSeriesInput({...testSeriesInput , Exam: e.target.value})}}/>
-                <button onClick={async () => {await addTestSEries()} }>Add Course</button> 
+                <input placeholder="totalTest" onChange={(e) => {setTestSeriesInput({...testSeriesInput , totalTest: e.target.value})}} value={testSeriesInput?.totalTest}/>
+                <input placeholder="freeTest" onChange={(e) => {setTestSeriesInput({...testSeriesInput , freeTest: e.target.value})}} value={testSeriesInput?.freeTest}/>
+                <input placeholder="title" onChange={(e) => {setTestSeriesInput({...testSeriesInput , title: e.target.value})}} value={testSeriesInput?.title}/>
+                <input placeholder="price" onChange={(e) => {setTestSeriesInput({...testSeriesInput , price: e.target.value})}} value={testSeriesInput?.price}/>
+                <input placeholder="alreadyEnrolled" onChange={(e) => {setTestSeriesInput({...testSeriesInput , alreadyEnrolled: e.target.value})}} value={testSeriesInput?.alreadyEnrolled}/>
+                <input placeholder="rating" onChange={(e) => {setTestSeriesInput({...testSeriesInput , rating: e.target.value})}} value={testSeriesInput?.rating}/>
+                <input placeholder="createdAt" type="date" onChange={(e) => {setTestSeriesInput({...testSeriesInput , createdAt: e.target.value})}} value={testSeriesInput?.createdAt}/>
+                <input placeholder="updatedAt" type="date" onChange={(e) => {setTestSeriesInput({...testSeriesInput , updatedAt: e.target.value})}} value={testSeriesInput?.updatedAt}/>
+                <input placeholder="about" onChange={(e) => {setTestSeriesInput({...testSeriesInput , about: e.target.value})}} value={testSeriesInput?.about}/>
+                <input placeholder="category" onChange={(e) => {setTestSeriesInput({...testSeriesInput , category: e.target.value})}} value={testSeriesInput?.category}/>
+                <input placeholder="Exam" onChange={(e) => {setTestSeriesInput({...testSeriesInput , Exam: e.target.value})}} value={testSeriesInput?.Exam}/>
+                {!id ? <button onClick={async () => { await addTestSEries('') }}>Add Course</button> : <button onClick={async () => { await addTestSEries('PUT') }}>Add Course</button>}
 
         </>
     )
