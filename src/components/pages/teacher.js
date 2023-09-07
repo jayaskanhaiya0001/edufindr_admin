@@ -96,17 +96,7 @@ const CourseForm = ({ id }) => {
             console.log(err)
         }
 
-        try {
-            let res = await axios.post('https://courseselling.onrender.com/api/v1/createCourse', teacherInput)
-            if (res) {
-                console.log(res)
-            }
-        } catch (err) {
-            console.log(err)
-        }
-
-
-
+    }
         // useEffect(()=>{
         //     const updateTeacher = teachers?.filter((data) => data?._id === id);
         //     if(updateTeacher) {
@@ -182,7 +172,7 @@ const CourseForm = ({ id }) => {
                             {!btn?.highBtn ? <button onClick={() => { setTeacherInput({ ...teacherInput, highlights: [...teacherInput?.highlights, { highlight: highlightInput }] }) }}>Add Highlight</button> : <button onClick={() => { setTeacherInput({ ...teacherInput, highlights: teacherInput?.highlights?.map((data, index) => index === allInd?.highInd ? { highlight: highlightInput } : data) }) }}>Update Highlight</button>}
 
                             <div>
-                                {teacherInput?.highlights((data, index) => {
+                                {teacherInput?.highlights?.map((data, index) => {
                                     return <div>
                                         <p>{data?.highlight}</p>
                                         <button onClick={() => { setHighLightInput(data?.highlight); setBtn({ ...btn, highBtn: true }); setAllInd({ ...allInd, highInd: index }) }}>Update</button>
@@ -201,4 +191,3 @@ const CourseForm = ({ id }) => {
             </>
         )
     }
-}
