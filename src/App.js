@@ -1,6 +1,7 @@
 import { BrowserRouter , Routes , Route } from 'react-router-dom';
 import { Course } from './components/pages/course';
 import { Admin } from './components/pages/Admin';
+import Form from './components/pages/Form';
 import './App.css';
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path='/freebeis' element={<Freebeis />} />
           <Route path='/freebeis/blog' element={<Freebeis />} />
           <Route path='/contact-us' element={<ContactUs/>}/> */}
+          <Route path='/form' element={<Form/>}/>
         </Routes>
       </BrowserRouter>
     </>
