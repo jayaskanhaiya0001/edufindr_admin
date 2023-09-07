@@ -48,8 +48,9 @@ export const Teacher = () => {
                         teachers?.map((data, index) => {
                             return (
                                 <>
+                                {console.log(data)}
                                     <div>
-                                        <img src={data?.img ? data?.img : "/images/dummy.png"} alt="teacher" />
+                                        <img style={{height:"150px", width:"209px"}}src={data?.image ? data?.image : "/images/dummy.png"} alt="teacher" />
                                         <h1>{data?.name}</h1>
                                         <h3>{data?.designation}</h3>
                                         <p>{data?.about}</p>
@@ -69,41 +70,42 @@ export const Teacher = () => {
 
 const CourseForm = ({ teachers, id }) => {
     const [teacherInput, setTeacherInput] = useState({
-        name: "John Smith",
-        yearsOfExperience: 10,
-        designation: "Math Teacher",
-        studentsTaught: 300,
-        selections: 50,
-        about: "Passionate about teaching mathematics...",
-        highlights: [
-            { "highlight": "Published research in algebra" },
-            { "highlight": "Received Teacher of the Year award" }
+        "name": "",
+        "yearsOfExperience": "" ,
+        "designation": "",
+        "studentsTaught": "",
+        "selections": "",
+        "about": "Passionate about teaching mathematics...",
+           "highlights": [
+                { "highlight": "Published research in algebra" },
+                { "highlight": "Received Teacher of the Year award" }
+            ],
+        "educations": [
+          {
+            "degree": "Bachelor of Science",
+            "university": "XYZ University",
+            "year": 2008
+          },
+          {
+            "degree": "Master of Education",
+            "university": "ABC University",
+            "year": 2012
+          }
         ],
-        educations: [
-            {
-                "degree": "Bachelor of Science",
-                "university": "XYZ University",
-                "year": 2008
-            },
-            {
-                "degree": "Master of Education",
-                "university": "ABC University",
-                "year": 2012
-            }
+        "experiences": [
+          {
+            "position": "Math Teacher",
+            "institution": "Stansford University",
+            "year": 2012
+          },
+          {
+            "position": "Head of Department",
+            "institution": "456 Academy",
+            "year": 2018
+          }
         ],
-        experiences: [
-            {
-                "position": "Math Teacher",
-                "institution": "123 High School",
-                "year": 2012
-            },
-            {
-                "position": "Head of Department",
-                "institution": "456 Academy",
-                "year": 2018
-            }
-        ]
-    })
+        "image":""
+      })
 
     const handleTeacher = async (method) => {
         try {
