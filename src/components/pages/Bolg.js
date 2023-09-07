@@ -75,13 +75,14 @@ const BlogForm = ({AllBlogs , id}) => {
         content: "",
         image: "",
         author: "",
-        tags: ["technology", "coding", "web development"],
-        createdAt: "2023-08-17T12:00:00.000Z",
-        updatedAt: "2023-08-17T14:30:00.000Z"
+        tags: [],
+        createdAt: "",
+        updatedAt: ""
     })
-    const handleBlog = async (method) => {
+    const [tags , setTags] = useState("")
+    const handleBlog = async () => {
         try {
-            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateBlogs/${id}`, blogInput) : await axios.post(`https://courseselling.onrender.com/api/v1/blog`, blogInput);
+            let res = await axios.post(`https://courseselling.onrender.com/api/v1/blog`, blogInput);
             if(res) {
                 console.log(res)
             }
@@ -89,6 +90,18 @@ const BlogForm = ({AllBlogs , id}) => {
             console.log(err)
         }
 
+    }
+
+    const handleUpdateBlog = async () => {
+        try {
+
+            let res =  await axios.put(`https://courseselling.onrender.com/api/v1/updateBlogs/${id}`, blogInput)
+            if(res) {
+                console.log(res)
+            }
+        } catch(err) {
+            console.log(err)
+        }
     }
 
     useEffect(()=>{
@@ -105,7 +118,11 @@ const BlogForm = ({AllBlogs , id}) => {
                 <input placeholder="author" onChange={(e) => {setBlogInput({...blogInput , author: e.target.value})}} value={blogInput?.author}/>
                 <input placeholder="createdAt" type="date" onChange={(e) => {setBlogInput({...blogInput , createdAt: e.target.value})}} value={blogInput?.createdAt}/>
                 <input placeholder="updatedAt" type="date" onChange={(e) => {setBlogInput({...blogInput , updatedAt: e.target.value})}} value={blogInput?.updatedAt}/>
-                {!id ? <button onClick={async () => {await handleBlog('')} }>Add Course</button> : <button onClick={async () => {await handleBlog('PUT')} }>Update Blog</button>}
+                <input placeholder="tags" type="text" onChange={(e) => {setTags(e.target.value)}}/>
+                <button onClick={() => setBlogInput({...blogInput , tags: [...blogInput?.tags , tags]})}>Add Tag</button>
+                <button onClick={async () => {await handleBlog()} }>Add Course</button> 
+                <button onClick={async () => {await handleUpdateBlog()} }>Update Blog</button>
+
 
         </>
     )
