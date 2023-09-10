@@ -7,6 +7,7 @@ export const Course = () => {
     const [teachers, setTeachers] = useState([])
     const [inputs, setInputs] = useState({ add: false, update: false })
     const [id, setId] = useState('')
+    const [file, setFile] = useState(null);
     const [courseInput, setCourseInput] = useState({
         image: "",
         mentorNames: [
@@ -42,11 +43,48 @@ export const Course = () => {
         let [{ name, _id }] = teachers?.filter((data) => data?._id === id && data);
         setCourseInput({ ...courseInput, mentorNames: [{ _id: _id, name: name }] })
     };
+    
     const handleCourse = async (method) => {
+        const formDataToSend = new FormData();
+    formDataToSend.append('file', file);
+    formDataToSend.append('formData', JSON.stringify(courseInput));
         try {
-            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateCourse/${id}`, courseInput) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, courseInput);
+            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateCourse/${id}`, formDataToSend, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              }) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, formDataToSend, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });;
             if (res) {
                 console.log(res)
+                setCourseInput({
+                    image: "",
+                    mentorNames: [
+                        {
+                            _id: "",
+                            name: ""
+                        }
+                    ],
+                    courseDuration: "",
+                    title: "",
+                    alreadyEnrolled: null,
+                    price: null,
+                    rating: null,
+                    batchStarting: "",
+                    institute: "",
+                    language: "",
+                    about: "",
+                    highlights: [],
+                    enrollmentEndDate: new Date(),
+                    days: [],
+                    batches: [],
+                    features: [],
+                    category: "",
+                    Exam: ""
+                })
             }
         } catch (err) {
             console.log(err)
@@ -153,10 +191,12 @@ export const Course = () => {
         getCoursessData()
         getTeachersData()
     }, []);
-
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+      };
     return (
         <>
-
+{console.log(courseInput,"hell")}
             <div>
                 <AddItem inputHandle={inputHandle} />
                 <div className="Grid-Box">
@@ -166,10 +206,11 @@ export const Course = () => {
                                 <>
                                     <div>
                                         {/* <img src={data?.img} alt="teacher" /> */}
+                                        <img style={{height:"150px", width:"209px"}}src={data?.image ? data?.image : "/images/dummy.png"} alt="course" />
                                         <h1>{data?.title}</h1>
                                         <h3>{data?.Exam}</h3>
                                         <p>{data?.about}</p>
-                                        <button onClick={async () => setId(data?._id)}>Update</button>
+                                        <button onClick={async () => {setCourseInput(data); setId(data?._id)}}>Update</button>
                                         <button onClick={() => DeleteCourse(data?._id)}>Delete</button>
                                     </div>
                                 </>
@@ -195,7 +236,8 @@ export const Course = () => {
             <input placeholder="alreadyEnrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
             <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} />
             <input placeholder="rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} />
-            <input placeholder="batchStarting" onChange={(e) => { setCourseInput({ ...courseInput, batchStarting: e.target.value }) }} value={courseInput?.batchStarting} />
+            <input placeholder="batchStarting" type="date" onChange={(e) => { setCourseInput({ ...courseInput, batchStarting: e.target.value }) }} value={courseInput?.batchStarting} />
+            
             <input placeholder="institute" onChange={(e) => { setCourseInput({ ...courseInput, institute: e.target.value }) }} value={courseInput?.institute} />
             <input placeholder="language" onChange={(e) => { setCourseInput({ ...courseInput, language: e.target.value }) }} value={courseInput?.language} />
             <input placeholder="about" onChange={(e) => { setCourseInput({ ...courseInput, about: e.target.value }) }} value={courseInput?.about} />
@@ -247,6 +289,7 @@ export const Course = () => {
                     })}
                 </span>
             </div>
+            <div> Image Upload<div><input type="file" name="file" onChange={handleFileChange} /></div></div>
             {!id ? <button onClick={async () => { await handleCourse('') }}>Add Course</button> : <button onClick={async () => { await handleCourse('PUT') }}>Update Course</button>}
                </div>
 

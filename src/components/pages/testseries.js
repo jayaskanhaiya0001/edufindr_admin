@@ -30,6 +30,7 @@ export const TestSeries = () => {
     }
     return (
         <>
+        
             <div>
                 <AddItem inputHandle={inputHandle} />
                 <div className="Grid-Box">
@@ -65,7 +66,7 @@ const TestSeriesForm = ({ id, testSeries }) => {
         price: null,
         rating: null,
         languages: [],
-        about: "This is a sample test course designed for demonstration purposes.",
+        about: "",
         highlights: [],
         testDivision: [
             {
@@ -77,8 +78,8 @@ const TestSeriesForm = ({ id, testSeries }) => {
                 "value": "Advanced topics"
             }
         ],
-        category: "Education",
-        Exam: "Sample Exam",
+        category: "",
+        Exam: "",
         createdAt: "2023-08-22T12:00:00Z",
         updatedAt: "2023-08-22T14:30:00Z"
     })
@@ -146,14 +147,15 @@ const TestSeriesForm = ({ id, testSeries }) => {
     // }, [id])
     return (
         <>
+        {console.log(testSeriesInput,"hhhh")}
             <input placeholder="totalTest" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, totalTest: e.target.value }) }} value={testSeriesInput?.totalTest} />
             <input placeholder="freeTest" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, freeTest: e.target.value }) }} value={testSeriesInput?.freeTest} />
             <input placeholder="title" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, title: e.target.value }) }} value={testSeriesInput?.title} />
             <input placeholder="price" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, price: e.target.value }) }} value={testSeriesInput?.price} />
             <input placeholder="alreadyEnrolled" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, alreadyEnrolled: e.target.value }) }} value={testSeriesInput?.alreadyEnrolled} />
             <input placeholder="rating" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, rating: e.target.value }) }} value={testSeriesInput?.rating} />
-            <input placeholder="createdAt" type="date" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, createdAt: e.target.value }) }} value={testSeriesInput?.createdAt} />
-            <input placeholder="updatedAt" type="date" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, updatedAt: e.target.value }) }} value={testSeriesInput?.updatedAt} />
+            {/* <input placeholder="createdAt" type="date" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, createdAt: e.target.value }) }} value={testSeriesInput?.createdAt} />
+            <input placeholder="updatedAt" type="date" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, updatedAt: e.target.value }) }} value={testSeriesInput?.updatedAt} /> */}
             <input placeholder="about" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, about: e.target.value }) }} value={testSeriesInput?.about} />
             <input placeholder="category" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, category: e.target.value }) }} value={testSeriesInput?.category} />
             <input placeholder="Exam" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, Exam: e.target.value }) }} value={testSeriesInput?.Exam} />
@@ -179,7 +181,7 @@ const TestSeriesForm = ({ id, testSeries }) => {
                     })}
                 </span>
             </div>
-            {!id ? <button onClick={async () => { await addTestSEries('') }}>Add Course</button> : <button onClick={async () => { await addTestSEries('PUT') }}>Add Course</button>}
+            {!id ? <button onClick={async () => { await addTestSEries('') }}>Add Test</button> : <button onClick={async () => { await addTestSEries('PUT') }}>Add Course</button>}
 
         </>
     )
