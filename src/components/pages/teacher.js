@@ -104,7 +104,7 @@ const CourseForm = ({ id,teacherInput,setTeacherInput }) => {
     formDataToSend.append('file', file);
     formDataToSend.append('formData', JSON.stringify(teacherInput));
         try {
-            let res = await axios.post(`http://localhost:4000/api/v1/createTeacher`, formDataToSend, {
+            let res = await axios.post(`https://courseselling.onrender.com/api/v1/createTeacher`, formDataToSend, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
@@ -148,7 +148,7 @@ const CourseForm = ({ id,teacherInput,setTeacherInput }) => {
                 const formDataToSend = new FormData();
     formDataToSend.append('file', file);
     formDataToSend.append('formData', JSON.stringify(teacherInput));
-                const res = await axios.put(`http://localhost:4000/api/v1/updateTeacher/${id}`, formDataToSend, {
+                const res = await axios.put(`https://courseselling.onrender.com/api/v1/updateTeacher/${id}`, formDataToSend, {
                     headers: {
                       'Content-Type': 'multipart/form-data',
                     },
