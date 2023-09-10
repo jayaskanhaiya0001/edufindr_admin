@@ -28,6 +28,17 @@ export const Teacher = () => {
         }
     }
     const inputHandle = (key) => {
+        setTeacherInput({
+            name: "",
+            yearsOfExperience: null,
+            designation: "",
+            studentsTaught: 0,
+            selections: 0,
+            about: "",
+            highlights: [],
+            educations: [],
+            experiences: []
+        })
         switch (key) {
             case 'ADD':
                 // setInputs({ ...inputs, add: true })
@@ -38,6 +49,17 @@ export const Teacher = () => {
             default:
         }
     }
+    const [teacherInput, setTeacherInput] = useState({
+        name: "",
+        yearsOfExperience: null,
+        designation: "",
+        studentsTaught: 0,
+        selections: 0,
+        about: "",
+        highlights: [],
+        educations: [],
+        experiences: []
+    })
     return (
         <>
 
@@ -54,7 +76,7 @@ export const Teacher = () => {
                                         <h1>{data?.name}</h1>
                                         <h3>{data?.designation}</h3>
                                         <p>{data?.about}</p>
-                                        <button onClick={async () => setId(data?._id)}>Update</button>
+                                        <button onClick={async () => {setId(data?._id); setTeacherInput(data)}}>Update</button>
                                         <button onClick={() => DeleteTeacherData(data?._id)}>Delete</button>
                                     </div>
                                 </>
@@ -62,41 +84,52 @@ export const Teacher = () => {
                         })
                     }
                 </div>
-                <CourseForm id={id} teachers={teachers} />
+                <CourseForm id={id} teachers={teachers} teacherInput={teacherInput} setTeacherInput={setTeacherInput} />
             </div>
         </>
     )
 }
 
-const CourseForm = ({ id }) => {
-    const [teacherInput, setTeacherInput] = useState({
-        name: "",
-        yearsOfExperience: null,
-        designation: "",
-        studentsTaught: 0,
-        selections: 0,
-        about: "",
-        highlights: [],
-        educations: [],
-        experiences: []
-    })
+const CourseForm = ({ id,teacherInput,setTeacherInput }) => {
+
 
     const [educationDetail, setEducationDetail] = useState({ degree: "", university: "", year: "" })
     const [experienceDetail, setExperienceDetail] = useState({ position: "", institution: "", year: "" })
     const [highlightInput, setHighLightInput] = useState("")
     const [btn, setBtn] = useState({ eduBtn: false, expBtn: false, highBtn: false })
     const [allInd, setAllInd] = useState({ eduInd: 0, expInd: 0, highInd: 0 })
+    const [file, setFile] = useState(null);
     const handleTeacher = async () => {
+        const formDataToSend = new FormData();
+    formDataToSend.append('file', file);
+    formDataToSend.append('formData', JSON.stringify(teacherInput));
         try {
-            let res = await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, teacherInput);
+            let res = await axios.post(`http://localhost:4000/api/v1/createTeacher`, formDataToSend, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });
             if (res) {
                 console.log(res)
+                setTeacherInput({   name: "",
+                yearsOfExperience: null,
+                designation: "",
+                studentsTaught: 0,
+                selections: 0,
+                about: "",
+                highlights: [],
+                educations: [],
+                experiences: []})
             }
         } catch (err) {
             console.log(err)
         }
 
     }
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+      };
+    
         // useEffect(()=>{
         //     const updateTeacher = teachers?.filter((data) => data?._id === id);
         //     if(updateTeacher) {
@@ -112,7 +145,23 @@ const CourseForm = ({ id }) => {
 
         const handleTeacherUpdater = async () => {
             try {
-                const res = await axios.put(`https://courseselling.onrender.com/api/v1/updateTeacher/${id}`, teacherInput)
+                const formDataToSend = new FormData();
+    formDataToSend.append('file', file);
+    formDataToSend.append('formData', JSON.stringify(teacherInput));
+                const res = await axios.put(`http://localhost:4000/api/v1/updateTeacher/${id}`, formDataToSend, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data',
+                    },
+                  })
+                  setTeacherInput({   name: "",
+                  yearsOfExperience: null,
+                  designation: "",
+                  studentsTaught: 0,
+                  selections: 0,
+                  about: "",
+                  highlights: [],
+                  educations: [],
+                  experiences: []})
                 console.log(res, "Check Response")
             } catch (err) {
                 console.log(err, "Ërror")
@@ -120,6 +169,7 @@ const CourseForm = ({ id }) => {
         }
         return (
             <>
+            {console.log(teacherInput,"heellooo")}
                 <input placeholder="name" onChange={(e) => { setTeacherInput({ ...teacherInput, name: e.target.value }) }} value={teacherInput?.name} />
                 <input placeholder="yearsOfExperience" type="number" onChange={(e) => { setTeacherInput({ ...teacherInput, yearsOfExperience: e.target.value }) }} value={teacherInput?.yearsOfExperience} />
                 <input placeholder="designation" onChange={(e) => { setTeacherInput({ ...teacherInput, designation: e.target.value }) }} value={teacherInput?.designation} />
@@ -160,6 +210,7 @@ const CourseForm = ({ id }) => {
                                     <div><span>{data?.institution}</span></div>
                                     <div><span>{data?.year}</span></div>
                                     <button onClick={async () => { setExperienceDetail({ position: data?.position, institution: data?.institution, year: data?.year }); setBtn({ ...btn, expBtn: true }); setAllInd({ ...allInd, expInd: index }) }}>Update</button>
+                                    <button onClick={() => { setTeacherInput({ ...teacherInput, experiences: teacherInput?.experiences?.filter((data, ind) => index !== ind && data) }) }}>Delete</button>
                                 </div>
                             })
                         }
@@ -183,6 +234,7 @@ const CourseForm = ({ id }) => {
                         </div>
                     </div>
                 </div>
+                <div> Image Upload<div><input type="file" name="file" onChange={handleFileChange} /></div></div>
                 <button onClick={() => { handleTeacher() }}>Add Teacher</button>
 
                 <button onClick={() => {

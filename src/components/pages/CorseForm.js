@@ -106,7 +106,7 @@ export const CourseForm = ({ teachers, AllCourses, id }) => {
 
     return (
         <>
-
+{console.log(courseInput,"hehhhh")}
             <select onChange={(e) => { getTeacherIdHandle(e.target.value); }}>
                 {teachers?.map((data) => {
                     return (
