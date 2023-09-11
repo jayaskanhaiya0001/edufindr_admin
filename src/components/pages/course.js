@@ -40,6 +40,7 @@ export const Course = () => {
         features: ""
     })
     const getTeacherIdHandle = (id) => {
+        console.log("hhhh")
         let [{ name, _id }] = teachers?.filter((data) => data?._id === id && data);
         setCourseInput({ ...courseInput, mentorNames: [{ _id: _id, name: name }] })
     };
@@ -222,15 +223,14 @@ export const Course = () => {
                <div>
 
 
-               <select onChange={(e) => { getTeacherIdHandle(e.target.value); }}>
-                {teachers?.map((data) => {
-                    return (
-                        <>
-                            <option value={data?._id}>{data?.name}</option>
-                        </>
-                    )
-                })}
-            </select>
+               <select onChange={(e) => getTeacherIdHandle(e.target.value)}>
+  <option value="">Choose an option</option>
+  {teachers.map((data) => (
+    <option key={data._id} value={data._id}>
+      {data.name}
+    </option>
+  ))}
+</select>
             <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
             <input placeholder="title" onChange={(e) => { setCourseInput({ ...courseInput, title: e.target.value }) }} value={courseInput?.title} />
             <input placeholder="alreadyEnrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
