@@ -119,7 +119,7 @@ const BlogForm = ({AllBlogs , id,setBlogInput,blogInput}) => {
         formDataToSend.append('formData', JSON.stringify(blogInput));
         try {
 
-            let res =  await axios.put(`http://localhost:4000/api/v1/updateBlogs/${id}`, formDataToSend, {
+            let res =  await axios.put(`https://courseselling.onrender.com/api/v1/updateBlogs/${id}`, formDataToSend, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
