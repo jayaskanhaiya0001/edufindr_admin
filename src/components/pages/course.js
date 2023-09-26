@@ -1,6 +1,8 @@
 import axios from "axios";
 import { AddItem } from "../common/Placeholder/add";
 import { useEffect, useState } from "react";
+import { FileInput } from "../common/Fields/fileInput";
+import { ChipInput } from "../common/Fields/chipInput";
 import { CourseForm } from "./CorseForm";
 export const Course = () => {
     const [AllCourses, setAllCourses] = useState([]);
@@ -33,34 +35,26 @@ export const Course = () => {
         category: "",
         Exam: ""
     })
-    const [arrInput, setArrInput] = useState({
-        highLightInput: "",
-        daysInput: "",
-        batchesInput: "",
-        features: ""
-    })
     const getTeacherIdHandle = (id) => {
-        console.log("hhhh")
         let [{ name, _id }] = teachers?.filter((data) => data?._id === id && data);
         setCourseInput({ ...courseInput, mentorNames: [{ _id: _id, name: name }] })
     };
-    
+
     const handleCourse = async (method) => {
         const formDataToSend = new FormData();
-    formDataToSend.append('file', file);
-    formDataToSend.append('formData', JSON.stringify(courseInput));
+        formDataToSend.append('file', file);
+        formDataToSend.append('formData', JSON.stringify(courseInput));
         try {
             let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateCourse/${id}`, formDataToSend, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
-              }) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, formDataToSend, {
+            }) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, formDataToSend, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
-              });;
+            });;
             if (res) {
-                console.log(res)
                 setCourseInput({
                     image: "",
                     mentorNames: [
@@ -93,60 +87,33 @@ export const Course = () => {
 
     };
 
-    const handleHighlight = () => {
-        if (arrInput?.highLightInput?.trim() !== "") {
-            setCourseInput({ ...courseInput, highlights: [...courseInput?.highlights, { description: arrInput?.highLightInput }] })
-     
-        }
-        setArrInput({...arrInput, highLightInput: ""})
+    const handleHighlight = (val) => {
+        setCourseInput({ ...courseInput, highlights: [...courseInput?.highlights, { description: val }] })
     };
 
-    const handleHighLightUpdate = (e , index) => {
-        setCourseInput({...courseInput, highlights: courseInput?.highlights?.map((data , ind) => index === ind ? {description: e?.target?.value}: data)})
-    }
 
     const deletHighlight = (index) => {
-        setCourseInput({...courseInput, highlights: courseInput?.highlights?.filter((data , ind) => index !== ind && data)})
+        setCourseInput({ ...courseInput, highlights: courseInput?.highlights?.filter((data, ind) => index !== ind && data) })
     }
 
-    const handleDays = () => {
-        if (arrInput?.daysInput?.trim() !== "") {
-            setCourseInput({ ...courseInput, days: [...courseInput?.days, { day: arrInput?.daysInput }] })
-        }
-        setArrInput({...arrInput, daysInput: ""})
+    const handleDays = (val) => {
+        setCourseInput({ ...courseInput, days: [...courseInput?.days, { description: val }] })
     };
-
-    const handleHighUpdate = (e , index) => {
-        setCourseInput({...courseInput, days: courseInput?.days?.map((data , ind) => index === ind ? {day: e?.target?.value}: data)})
-    }
     const deleteDays = (index) => {
-        setCourseInput({...courseInput, days: courseInput?.days?.filter((data , ind) => index !== ind && data)})
+        setCourseInput({ ...courseInput, days: courseInput?.days?.filter((data, ind) => index !== ind && data) })
     }
 
-    const handleBatches = () => {
-        if (arrInput?.batchesInput?.trim() !== "") {
-            setCourseInput({ ...courseInput, batches: [...courseInput?.batches, { description: arrInput?.batchesInput }] })
-        }
-        setArrInput({...arrInput, batchesInput: ""})
+    const handleBatches = (val) => {
+        setCourseInput({ ...courseInput, batches: [...courseInput?.batches, { description: val }] })
     };
-
-    const handleBatchesUpdate = (e , index) => {
-        setCourseInput({...courseInput, batches: courseInput?.batches?.map((data , ind) => index === ind ? {description: e?.target?.value}: data)})
-    }
     const deleteBatches = (index) => {
-        setCourseInput({...courseInput, batches: courseInput?.batches?.filter((data , ind) => index !== ind && data)})
+        setCourseInput({ ...courseInput, batches: courseInput?.batches?.filter((data, ind) => index !== ind && data) })
     }
-    const handleFeatures = () => {
-        if (arrInput?.features?.trim() !== "") {
-            setCourseInput({ ...courseInput, features: [...courseInput?.features, { description: arrInput?.features }] })
-        }
-        setArrInput({...arrInput, features: ""})
+    const handleFeatures = (val) => {
+            setCourseInput({ ...courseInput, features: [...courseInput?.features, { description: val}] })
     };
-    const handleFeaturesUpdate = (e , index) => {
-        setCourseInput({...courseInput, features: courseInput?.features?.map((data , ind) => index === ind ? {description: e?.target?.value}: data)})
-    }
     const deleteFeatures = (index) => {
-        setCourseInput({...courseInput, features: courseInput?.features?.filter((data , ind) => index !== ind && data)})
+        setCourseInput({ ...courseInput, features: courseInput?.features?.filter((data, ind) => index !== ind && data) })
     }
     const getCoursessData = async () => {
         try {
@@ -192,27 +159,45 @@ export const Course = () => {
         getCoursessData()
         getTeachersData()
     }, []);
-    const handleFileChange = (e) => {
+    const getFileInputValue = (e) => {
         setFile(e.target.files[0]);
-      };
+    };
+
+    const [toggle, setToggle] = useState({
+        key: null,
+        boolVal: false
+    })
     return (
         <>
-{console.log(courseInput,"hell")}
             <div>
-                <AddItem inputHandle={inputHandle} />
+
                 <div className="Grid-Box">
+                    <AddItem inputHandle={inputHandle} text={'Add New Course'} />
                     {
                         AllCourses?.map((data, index) => {
                             return (
                                 <>
-                                    <div>
+                                    <div className="grid-content-cont">
                                         {/* <img src={data?.img} alt="teacher" /> */}
-                                        <img style={{height:"150px", width:"209px"}}src={data?.image ? data?.image : "/images/dummy.png"} alt="course" />
+                                        <div onClick={() => setToggle({ key: index, boolVal: !toggle?.boolVal })}>
+                                            <span className="kebab-btn" >
+
+                                            </span>
+                                            {
+                                                (toggle.key === index && toggle.boolVal === true) && (
+                                                    <>
+                                                        <div className="card-btn-box">
+                                                            <button onClick={async () => { setCourseInput(data); setId(data?._id) }}>Update</button>
+                                                            <button onClick={() => DeleteCourse(data?._id)}>Delete</button>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                        </div>
+                                        <img style={{ height: "150px", width: "100%" }} src={data?.image ? data?.image : "/images/dummy.png"} alt="course" />
                                         <h1>{data?.title}</h1>
                                         <h3>{data?.Exam}</h3>
                                         <p>{data?.about}</p>
-                                        <button onClick={async () => {setCourseInput(data); setId(data?._id)}}>Update</button>
-                                        <button onClick={() => DeleteCourse(data?._id)}>Delete</button>
                                     </div>
                                 </>
                             )
@@ -220,79 +205,92 @@ export const Course = () => {
                     }
                 </div>
 
-               <div>
+                {/* <div> */}
+                {/* <select onChange={(e) => getTeacherIdHandle(e.target.value)}>
+                        <option value="">Choose an option</option>
+                        {teachers.map((data) => (
+                            <option key={data._id} value={data._id}>
+                                {data.name}
+                            </option>
+                        ))}
+                    </select> */}
+                <div className="Form-Input-Box">
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>Course Duration</span>
+                            <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Title</span>
+                            <input placeholder="title" onChange={(e) => { setCourseInput({ ...courseInput, title: e.target.value }) }} value={courseInput?.title} />
+                        </div>
+                    </div>
 
-
-               <select onChange={(e) => getTeacherIdHandle(e.target.value)}>
-  <option value="">Choose an option</option>
-  {teachers.map((data) => (
-    <option key={data._id} value={data._id}>
-      {data.name}
-    </option>
-  ))}
-</select>
-            <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
-            <input placeholder="title" onChange={(e) => { setCourseInput({ ...courseInput, title: e.target.value }) }} value={courseInput?.title} />
-            <input placeholder="alreadyEnrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
-            <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} />
-            <input placeholder="rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} />
-            <input placeholder="batchStarting" type="date" onChange={(e) => { setCourseInput({ ...courseInput, batchStarting: e.target.value }) }} value={courseInput?.batchStarting} />
-            
-            <input placeholder="institute" onChange={(e) => { setCourseInput({ ...courseInput, institute: e.target.value }) }} value={courseInput?.institute} />
-            <input placeholder="language" onChange={(e) => { setCourseInput({ ...courseInput, language: e.target.value }) }} value={courseInput?.language} />
-            <input placeholder="about" onChange={(e) => { setCourseInput({ ...courseInput, about: e.target.value }) }} value={courseInput?.about} />
-            <input placeholder="category" onChange={(e) => { setCourseInput({ ...courseInput, category: e.target.value }) }} value={courseInput?.category} />
-            <input placeholder="Exam" onChange={(e) => { setCourseInput({ ...courseInput, Exam: e.target.value }) }} value={courseInput?.Exam} />
-            <input placeholder="Enrolment End Date" type="date" onChange={(e) => { setCourseInput({ ...courseInput, enrollmentEndDate: e.target.value }) }} value={courseInput?.enrollmentEndDate} />
-            <div>
-                <span>
-                    <input type="text" onChange={(e) => setArrInput({ ...arrInput, highLightInput: e.target.value })} value={arrInput?.highLightInput}/>
-                    <button onClick={() => handleHighlight()}>Add HightLight</button>
-                </span>
-                <span>
-                    {courseInput?.highlights?.map((data , index) => {
-                        return <div><input value={data?.description} onChange={(e) => {handleHighLightUpdate(e, index)}}/><p><button onClick={() => handleHighLightUpdate()}>Update</button><button onClick={() => deletHighlight(index)}>Delete</button></p></div>
-                    })}
-                </span>
-            </div>
-            <div>
-                <span>
-                    <input type="text" onChange={(e) => setArrInput({ ...arrInput, daysInput: e.target.value })} value={arrInput?.daysInput}/>
-                    <button onClick={() => handleDays()}>Add Days</button>
-                </span>
-                <span>
-                    {courseInput?.days?.map((data , index) => {
-                        return <div><input value={data?.day} onChange={(e) => {handleHighUpdate(e, index)}}/><p><button onClick={() => handleHighLightUpdate()}>Update</button><button onClick={() => deleteDays(index)}>Delete</button></p></div>
-                    })}
-                </span>
-            </div>
-
-            <div>
-                <span>
-                    <input type="text" onChange={(e) => setArrInput({ ...arrInput, batchesInput: e.target.value })} value={arrInput?.batchesInput}/>
-                    <button onClick={() => handleBatches()}>Add Batches</button>
-                </span>
-                <span>
-                    {courseInput?.batches?.map((data , index) => {
-                        return <div><input value={data?.description} onChange={(e) => {handleBatchesUpdate(e, index)}}/><p><button onClick={() => handleBatchesUpdate()}>Update</button><button onClick={() => deleteBatches(index)}>Delete</button></p></div>
-                    })}
-                </span>
-            </div>
-            <div>
-                <span>
-                    <input type="text" onChange={(e) => setArrInput({ ...arrInput, features: e.target.value })} value={arrInput?.features}/>
-                    <button onClick={() => handleFeatures()}>Add Features</button>
-                </span>
-                <span>
-                    {courseInput?.features?.map((data , index) => {
-                        return <div><input value={data?.description} onChange={(e) => {handleFeaturesUpdate(e, index)}}/><p><button onClick={() => handleFeaturesUpdate()}>Update</button><button onClick={() => deleteFeatures(index)}>Delete</button></p></div>
-                    })}
-                </span>
-            </div>
-            <div> Image Upload<div><input type="file" name="file" onChange={handleFileChange} /></div></div>
-            {!id ? <button onClick={async () => { await handleCourse('') }}>Add Course</button> : <button onClick={async () => { await handleCourse('PUT') }}>Update Course</button>}
-               </div>
-
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>Alrady Enrolled</span>
+                            <input placeholder="Alrady Enrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Price</span>
+                            <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} />
+                        </div>
+                    </div>
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>Rating</span>
+                            <input placeholder="Rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Batch Start</span>
+                            <input placeholder="batchStarting" type="date" onChange={(e) => { setCourseInput({ ...courseInput, batchStarting: e.target.value }) }} value={courseInput?.batchStarting} />
+                        </div>
+                    </div>
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>Institute</span>
+                            <input placeholder="institute" onChange={(e) => { setCourseInput({ ...courseInput, institute: e.target.value }) }} value={courseInput?.institute} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Language</span>
+                            <input placeholder="language" onChange={(e) => { setCourseInput({ ...courseInput, language: e.target.value }) }} value={courseInput?.language} />
+                        </div>
+                    </div>
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>About</span>
+                            <input placeholder="about" onChange={(e) => { setCourseInput({ ...courseInput, about: e.target.value }) }} value={courseInput?.about} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Category</span>
+                            <input placeholder="category" onChange={(e) => { setCourseInput({ ...courseInput, category: e.target.value }) }} value={courseInput?.category} />
+                        </div>
+                    </div>
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <span>Exam</span>
+                            <input placeholder="Exam" onChange={(e) => { setCourseInput({ ...courseInput, Exam: e.target.value }) }} value={courseInput?.Exam} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <span>Enrolment End Date</span>
+                            <input placeholder="Enrolment End Date" type="date" onChange={(e) => { setCourseInput({ ...courseInput, enrollmentEndDate: e.target.value }) }} value={courseInput?.enrollmentEndDate} />
+                        </div>
+                    </div>
+                    <div className="Input-Field-row">
+                        <FileInput getFileInputValue={getFileInputValue} />
+                        <ChipInput items={courseInput?.highlights} handleHighlight={handleHighlight} deletHighlight={deletHighlight} label={'Highlight'} />
+                    </div>
+                    <div className="Input-Field-row">
+                        <ChipInput items={courseInput?.days} handleHighlight={handleDays} deletHighlight={deleteDays} label={'Days'} />
+                        <ChipInput items={courseInput?.batches} handleHighlight={handleBatches} deletHighlight={deleteBatches} label={'Batches'} />
+                    </div>
+                    <div className="Input-Field-row">
+                        <ChipInput items={courseInput?.features} handleHighlight={handleFeatures} deletHighlight={deleteFeatures} label={'Features'} />
+                    </div>
+                </div>
+                <div className="btn-Box">
+                    {!id ? <button onClick={async () => { await handleCourse('') }} className="Form-Btn">Submit</button> : <button onClick={async () => { await handleCourse('PUT') }} className="Form-Btn">Update</button>}
+                </div>
             </div>
         </>
     )

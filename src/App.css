@@ -39,7 +39,70 @@
 }
 
 .Grid-Box {
+  padding: 20px;
   grid-gap: 40px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
+
+
+/* Commin Css */
+.grid-content-cont {
+  position: relative;
+  height: 300px;
+}
+.grid-content-cont > div {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background: #fff;
+  right: 10%;
+  top: 4%;
+}
+.kebab-btn {
+  width: 20px;
+  height: 20px;
+}
+
+.card-btn-box {
+  position: absolute;
+  left: 100%;
+  background: #fff;
+  z-index: 999;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.card-btn-box > button {
+  padding: 10px;
+  border: none;
+  background: #fff;
+  width: 100%;
+}
+.AddItem {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  background: rgb(245, 245, 245);
+  border: 1px dashed #000;
+  width: 300px;
+} 
+.grid-content-cont > h1{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grid-content-cont > h3{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grid-content-cont > p{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/*  */

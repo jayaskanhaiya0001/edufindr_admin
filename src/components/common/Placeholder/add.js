@@ -1,10 +1,9 @@
-export const AddItem  = ({inputHandle}) => {
+export const AddItem  = ({inputHandle , text}) => {
     return (
         <>
-        <div className="AddItem">
-            <button onClick={() => inputHandle('ADD')}>
-                Add
-            </button>
+        <div className="AddItem" onClick={() => inputHandle('ADD')}>
+            <img src ="/icons/add.svg" alt="" className="Add_Placeholder"/>
+            <p>{text}</p>
         </div>
         </>
     )

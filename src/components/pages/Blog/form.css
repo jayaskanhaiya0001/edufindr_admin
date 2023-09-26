@@ -1,0 +1,44 @@
+.Input-Field-row {
+    display: flex;
+    gap: 24px;
+    padding: 20.625px;
+}
+
+.Input-Field-Box {
+    border: 1px solid #E3E6F0;
+    background: #F7F7F7;
+    padding: 20.625px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 15.99px;
+}
+
+.Input-Field-Box>input {
+    border-radius: 5.6px;
+    border: 1px solid #D1D3E2;
+    background: #FFF;
+    padding: 7.435px 11.995px;
+}
+
+.Input-Field-Box>span {
+    color: #858796;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+}
+
+.btn-Box {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.Form-Btn {
+    border-radius: 5.6px;
+    border: 1px solid #4E73DF;
+    background: #6022EA;
+    padding: 6.625px 12.31px 6.625px 12.51px;
+    color: #fff;
+}

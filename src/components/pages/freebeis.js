@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FileInput } from "../common/Fields/fileInput";
 import { AddItem } from "../common/Placeholder/add";
 import axios from "axios";
 export const Freebeis = () => {
@@ -10,7 +11,15 @@ export const Freebeis = () => {
         
       })
     const [frebeisInfo, setFreebeisInfo] = useState("file");
-    const [allFreebeis , setAllFreebeis] = useState([]) 
+    const [allFreebeis , setAllFreebeis] = useState([])
+    const [toggle, setToggle] = useState({
+        key: null,
+        boolVal: false
+    })
+
+    const getFileInputValue = (inpVal) => {
+
+    }
       const addFreebeis = async () => {
         try {
 
@@ -61,11 +70,25 @@ export const Freebeis = () => {
                         allFreebeis?.map((data, index) => {
                             return (
                                 <>
-                                    <div>
-                                        {console.log(data , "Data")}
-                                        <img src={'/images/dummy.png'} alt="teacher" />
+                                    <div className="grid-content-cont">
+                                    <div onClick={() => setToggle({ key: index, boolVal: !toggle?.boolVal })}>
+                                            <span className="kebab-btn" >
+
+                                            </span>
+                                            {
+                                                (toggle.key === index && toggle.boolVal === true) && (
+                                                    <>
+                                                        <div className="card-btn-box">
+                                                            {/* <button onClick={async () => setId(data?._id)}>Update</button> */}
+                                                            <button onClick={() => deleteFreebeis(data?._id)}>Delete</button>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                        </div>
+                                        <img src={'/images/dummy.png'} alt="teacher" style={{ height: "150px", width: "100%" }}/>
                                         <h3>{data?.about}</h3>
-                                        <button onClick={() => deleteFreebeis(data?._id)}>Delete</button>
+
                                     </div>
                                 </>
                             )

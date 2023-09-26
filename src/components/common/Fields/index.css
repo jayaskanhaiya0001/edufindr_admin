@@ -1,0 +1,53 @@
+/* Chip Input Fiels CSS */
+.Chip-Main-Container {
+    display: flex;
+    align-items: center;
+    border-radius: 5.6px;
+    border: 1px solid #D1D3E2;
+    background: #FFF;
+    padding: 7.435px 11.995px;
+    overflow-x: scroll;
+}
+.Chip-Main-Container::-webkit-scrollbar {
+    display: none;
+  }
+
+.Chip-Main-Input {
+    outline: none;
+    border: none;
+    width: 100%;
+    min-width: 50px;
+}
+
+.cross-btn {
+    border: none;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    font-size: 10px;
+}
+
+.rounded-item{
+    color: rgba(0, 0, 0, 0.87);
+    border: none;
+    cursor: default;
+    height: 32px;
+    display: inline-flex;
+    padding: 10px;
+    gap: 10px;
+    font-size: 0.8125rem;
+    box-sizing: border-box;
+    transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 16px;
+    vertical-align: middle;
+    justify-content: center;
+    text-decoration: none;
+    background-color: #e0e0e0;
+}
+
+/* End Input Field CSS */
