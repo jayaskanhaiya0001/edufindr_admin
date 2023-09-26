@@ -16,9 +16,10 @@ export const Freebeis = () => {
         key: null,
         boolVal: false
     })
+    const [pdfUrl , setPdfUrl] = useState("")
 
-    const getFileInputValue = (inpVal) => {
-
+    const getFileInputValue = (event) => {
+        setPdfUrl(URL.createObjectURL(event.target.files[0]))
     }
       const addFreebeis = async () => {
         try {
@@ -104,7 +105,8 @@ export const Freebeis = () => {
                 <option value="file">File</option>
                 <option value="video">Video</option>
             </select>
-            <input type="file" onChange={(e) => {setFreebeisInput({...freebeisInput , freeBees: {...freebeisInput?.freeBees, value: e.target.value}})}}/>
+            <iframe id="viewer" frameborder="0" scrolling="no" width="300" height="200" src={pdfUrl}></iframe>
+            <input type="file" onChange={(e) => {setFreebeisInput({...freebeisInput , freeBees: {...freebeisInput?.freeBees, value: e.target.value}}); getFileInputValue(e)}}/>
             <button onClick={() => addFreebeis()}>Add Freebeis</button>
         </div>
         </>

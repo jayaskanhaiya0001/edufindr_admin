@@ -1,6 +1,8 @@
 import axios from "axios";
 import { AddItem } from "../common/Placeholder/add";
 import { useEffect, useState } from "react";
+import { ChipInput } from "../common/Fields/chipInput";
+import { FileInput } from "../common/Fields/fileInput";
 import "./Blog/form.css";
 export const Teacher = () => {
     const [teachers, setTeachers] = useState([])
@@ -20,7 +22,7 @@ export const Teacher = () => {
         educations: [],
         experiences: []
     })
-    console.log(teacherInput , "Teacher Input")
+    console.log(teacherInput, "Teacher Input")
     const getTeachersData = async () => {
         try {
             const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllTeachers')
@@ -35,7 +37,7 @@ export const Teacher = () => {
     useEffect(() => {
         getTeachersData()
     }, []);
-    console.log(teacherInput , "Teacher Input")
+    console.log(teacherInput, "Teacher Input")
     const DeleteTeacherData = async (id) => {
         try {
             const res = await axios.delete(`https://courseselling.onrender.com/api/v1/deleteTeacher/${id}`)
@@ -56,15 +58,6 @@ export const Teacher = () => {
             educations: [],
             experiences: []
         })
-        switch (key) {
-            case 'ADD':
-                // setInputs({ ...inputs, add: true })
-                break;
-            case 'UPDATE':
-                // setInputs({ ...inputs, update: true })
-                break;
-            default:
-        }
     }
 
     return (
@@ -146,22 +139,22 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
         }
 
     }
+    const handleHighlight = (val) => {
+        setTeacherInput({ ...teacherInput, highlights: [...teacherInput?.highlights, { description: val }] })
+    };
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
-
-    // useEffect(()=>{
-    //     const updateTeacher = teachers?.filter((data) => data?._id === id);
-    //     if(updateTeacher) {
-    //         setTeacherInput(updateTeacher[0])
-    //     }
-    // },[id])
     const handleEducationUpdate = (id) => {
         setTeacherInput({ ...teacherInput, educations: teacherInput?.educations?.map((data, index) => index === id ? educationDetail : data) })
     }
     const handleExperienceUpdate = (id) => {
         setTeacherInput({ ...teacherInput, experiences: teacherInput?.experiences?.map((data, index) => index === id ? experienceDetail : data) })
     }
+
+    const deletHighlight = (index) => [
+        setTeacherInput({ ...teacherInput, highlights: teacherInput?.highlights?.filter((data, ind) => index !== ind && data) })
+    ]
 
     const handleTeacherUpdater = async () => {
         try {
@@ -222,6 +215,10 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
                         <input placeholder="About" onChange={(e) => { setTeacherInput({ ...teacherInput, about: e.target.value }) }} value={teacherInput?.about} />
                     </div>
                 </div>
+                <div className="Input-Field-row">
+                    <FileInput getFileInputValue={handleFileChange} />
+                    <ChipInput handleHighlight={handleHighlight} items={teacherInput?.highlights} deletHighlight={deletHighlight} label={'Highlights'} />
+                </div>
             </div>
 
 
@@ -232,7 +229,7 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
                 <input placeholder="degree" onChange={(e) => { setEducationDetail({ ...educationDetail, degree: e.target.value }) }} value={educationDetail?.degree} />
                 <input placeholder="university" onChange={(e) => { setEducationDetail({ ...educationDetail, university: e.target.value }) }} value={educationDetail?.university} />
                 <input placeholder="year" onChange={(e) => { setEducationDetail({ ...educationDetail, year: e.target.value }) }} value={educationDetail?.year} />
-                {!btn?.eduBtn ? <button onClick={() =>{ setTeacherInput({ ...teacherInput, educations: [...teacherInput?.educations, educationDetail] }); setEducationDetail({degree:"",university:"",year:""})}}>Add Education</button> : <button onClick={() => { handleEducationUpdate(allInd?.eduInd); setBtn({ ...btn, eduBtn: false }); setEducationDetail({degree:"",university:"",year:""})}}>Update</button>}
+                {!btn?.eduBtn ? <button onClick={() => { setTeacherInput({ ...teacherInput, educations: [...teacherInput?.educations, educationDetail] }); setEducationDetail({ degree: "", university: "", year: "" }) }}>Add Education</button> : <button onClick={() => { handleEducationUpdate(allInd?.eduInd); setBtn({ ...btn, eduBtn: false }); setEducationDetail({ degree: "", university: "", year: "" }) }}>Update</button>}
                 <div>
                     {
                         teacherInput?.educations?.map((data, index) => {
@@ -267,30 +264,16 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
                     }
                 </div>
             </div>
-            <div>
-                highlights
-                <div>
-                    <div><input onChange={(e) => setHighLightInput(e.target.value)} value={highlightInput} />
-                        {!btn?.highBtn ? <button onClick={() => { setTeacherInput({ ...teacherInput, highlights: [...teacherInput?.highlights, { highlight: highlightInput }] }) }}>Add Highlight</button> : <button onClick={() => { setTeacherInput({ ...teacherInput, highlights: teacherInput?.highlights?.map((data, index) => index === allInd?.highInd ? { highlight: highlightInput } : data) }) }}>Update Highlight</button>}
+            <div className="btn-Box">
 
-                        <div>
-                            {teacherInput?.highlights?.map((data, index) => {
-                                return <div>
-                                    <p>{data?.highlight}</p>
-                                    <button onClick={() => { setHighLightInput(data?.highlight); setBtn({ ...btn, highBtn: true }); setAllInd({ ...allInd, highInd: index }) }}>Update</button>
-                                    <button onClick={() => { setTeacherInput({ ...teacherInput, highlights: teacherInput?.highlights?.filter((data, ind) => index !== ind && data) }) }}>Delete</button>
-                                </div>
-                            })}
-                        </div>
-                    </div>
-                </div>
+                <button onClick={() => { handleTeacher() }} className="Form-Btn">Submit</button>
+                <button onClick={() => {
+                    handleTeacherUpdater()
+                }} className="Form-Btn">Update</button>
             </div>
-            <div> Image Upload<div><input type="file" name="file" onChange={handleFileChange} /></div></div>
-            <button onClick={() => { handleTeacher() }}>Add Teacher</button>
 
-            <button onClick={() => {
-                handleTeacherUpdater()
-            }}>Update Teacher Detail</button>
+
+
         </>
     )
 }
