@@ -51,7 +51,8 @@
   position: relative;
   height: 300px;
 }
-.grid-content-cont > div {
+
+.grid-content-cont>div {
   position: absolute;
   height: 30px;
   width: 30px;
@@ -60,6 +61,7 @@
   right: 10%;
   top: 4%;
 }
+
 .kebab-btn {
   width: 20px;
   height: 20px;
@@ -73,12 +75,14 @@
   border-radius: 10px;
   overflow: hidden;
 }
-.card-btn-box > button {
+
+.card-btn-box>button {
   padding: 10px;
   border: none;
   background: #fff;
   width: 100%;
 }
+
 .AddItem {
   height: 300px;
   display: flex;
@@ -89,20 +93,68 @@
   background: rgb(245, 245, 245);
   border: 1px dashed #000;
   width: 300px;
-} 
-.grid-content-cont > h1{
+}
+
+.grid-content-cont>h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.grid-content-cont > h3{
+
+.grid-content-cont>h3 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.grid-content-cont > p{
+
+.grid-content-cont>p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.select_box {
+  border-radius: 5.6px;
+  border: 1px solid #D1D3E2;
+  background: #FFF;
+  padding: 7.435px 11.995px;
+}
+
+.select_box>.option {
+  background: #FFF;
+  padding: 7.435px 11.995px;
+  display: block;
+}
+
+.Flex-Container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+  background: #F7F7F7;
+  min-height: 400px;
+}
+
+.Flex-Box {
+  display: flex;
+  gap: 15px;
+
+}
+
+.cont-flex-box {
+  display: flex;
+  margin-top: 20px;
+  gap: 40px;
+  text-transform: capitalize;
+  padding-left: 20px;
+}
+
+.cont-flex-box>button {
+  border-radius: 5.6px;
+  border: 1px solid #4E73DF;
+  background: #6022EA;
+  padding: 6.625px 12.31px 6.625px 12.51px;
+  color: #fff;
+
+}
+
 /*  */

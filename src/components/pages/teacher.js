@@ -25,7 +25,7 @@ export const Teacher = () => {
     console.log(teacherInput, "Teacher Input")
     const getTeachersData = async () => {
         try {
-            const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllTeachers')
+            const res = await axios.get('https://edu-server-side-2023.onrender.com/api/v1/getAllTeachers')
             console.log(res)
             if (res?.data?.success) {
                 setTeachers(res?.data?.data)
@@ -40,7 +40,7 @@ export const Teacher = () => {
     console.log(teacherInput, "Teacher Input")
     const DeleteTeacherData = async (id) => {
         try {
-            const res = await axios.delete(`https://courseselling.onrender.com/api/v1/deleteTeacher/${id}`)
+            const res = await axios.delete(`https://edu-server-side-2023.onrender.com/api/v1/deleteTeacher/${id}`)
             console.log(res)
         } catch (err) {
             console.log(err)
@@ -87,7 +87,7 @@ export const Teacher = () => {
                                                 )
                                             }
                                         </div>
-                                        <img style={{ height: "150px", width: "100%", minWidth: "300px", maxWidth: "fit-content" }} src={data?.image ? data?.image : "/images/dummy.png"} alt="teacher" />
+                                        <img style={{ height: "150px", width: "100%" }} src={data?.image ? data?.image : "/images/dummy.png"} alt="teacher" />
                                         <h1>{data?.name}</h1>
                                         <h3>{data?.designation}</h3>
                                         <p>{data?.about}</p>
@@ -115,7 +115,7 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
         formDataToSend.append('file', file);
         formDataToSend.append('formData', JSON.stringify(teacherInput));
         try {
-            let res = await axios.post(`https://courseselling.onrender.com/api/v1/createTeacher`, formDataToSend, {
+            let res = await axios.post(`https://edu-server-side-2023.onrender.com/api/v1/createTeacher`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -161,7 +161,7 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
             const formDataToSend = new FormData();
             formDataToSend.append('file', file);
             formDataToSend.append('formData', JSON.stringify(teacherInput));
-            const res = await axios.put(`https://courseselling.onrender.com/api/v1/updateTeacher/${id}`, formDataToSend, {
+            const res = await axios.put(`https://edu-server-side-2023.onrender.com/api/v1/updateTeacher/${id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -219,51 +219,75 @@ const CourseForm = ({ id, teacherInput, setTeacherInput }) => {
                     <FileInput getFileInputValue={handleFileChange} />
                     <ChipInput handleHighlight={handleHighlight} items={teacherInput?.highlights} deletHighlight={deletHighlight} label={'Highlights'} />
                 </div>
-            </div>
+                <div className="Flex-Container ">
+                    <div className="Flex-Box">
+                        <div className="Input-Field-Box">
+                            <input placeholder="degree" onChange={(e) => { setEducationDetail({ ...educationDetail, degree: e.target.value }) }} value={educationDetail?.degree} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <input placeholder="university" onChange={(e) => { setEducationDetail({ ...educationDetail, university: e.target.value }) }} value={educationDetail?.university} />
+                        </div>
+                        <div className="Input-Field-Box">
+                            <input placeholder="year" onChange={(e) => { setEducationDetail({ ...educationDetail, year: e.target.value }) }} value={educationDetail?.year} />
+                        </div>
+                        <div className="btn-Box">
+                            {!btn?.eduBtn ? <button onClick={() => { setTeacherInput({ ...teacherInput, educations: [...teacherInput?.educations, educationDetail] }); setEducationDetail({ degree: "", university: "", year: "" }) }} className="Form-Btn">Save</button> : <button onClick={() => { handleEducationUpdate(allInd?.eduInd); setBtn({ ...btn, eduBtn: false }); setEducationDetail({ degree: "", university: "", year: "" }) }} className="Form-Btn">Update</button>}
+                        </div>
+                    </div>
+
+                    <div>
+                        {
+                            teacherInput?.educations?.map((data, index) => {
+                                return <div className="cont-flex-box">
+                                    <div><span>{data?.degree}</span></div>
+                                    <div><span>{data?.university}</span></div>
+                                    <div><span>{data?.year}</span></div>
+                                    <button onClick={() => { setEducationDetail({ degree: data?.degree, university: data?.university, year: data?.year }); setAllInd({ ...allInd, eduInd: index }); setBtn({ ...btn, eduBtn: true }) }}>Update</button>
+                                    <button onClick={() => { setTeacherInput({ ...teacherInput, educations: teacherInput?.educations?.filter((data, ind) => ind !== index && data) }) }}>Delete</button>
+                                </div>
+                            })
+                        }
+                    </div>
+                </div>
 
 
 
 
-            <div>
-                <h1>Educations</h1>
-                <input placeholder="degree" onChange={(e) => { setEducationDetail({ ...educationDetail, degree: e.target.value }) }} value={educationDetail?.degree} />
-                <input placeholder="university" onChange={(e) => { setEducationDetail({ ...educationDetail, university: e.target.value }) }} value={educationDetail?.university} />
-                <input placeholder="year" onChange={(e) => { setEducationDetail({ ...educationDetail, year: e.target.value }) }} value={educationDetail?.year} />
-                {!btn?.eduBtn ? <button onClick={() => { setTeacherInput({ ...teacherInput, educations: [...teacherInput?.educations, educationDetail] }); setEducationDetail({ degree: "", university: "", year: "" }) }}>Add Education</button> : <button onClick={() => { handleEducationUpdate(allInd?.eduInd); setBtn({ ...btn, eduBtn: false }); setEducationDetail({ degree: "", university: "", year: "" }) }}>Update</button>}
-                <div>
-                    {
-                        teacherInput?.educations?.map((data, index) => {
-                            return <div>
-                                <div><span>{data?.degree}</span></div>
-                                <div><span>{data?.university}</span></div>
-                                <div><span>{data?.year}</span></div>
-                                <button onClick={() => { setEducationDetail({ degree: data?.degree, university: data?.university, year: data?.year }); setAllInd({ ...allInd, eduInd: index }); setBtn({ ...btn, eduBtn: true }) }}>Update</button>
-                                <button onClick={() => { setTeacherInput({ ...teacherInput, educations: teacherInput?.educations?.filter((data, ind) => ind !== index && data) }) }}>Delete</button>
-                            </div>
-                        })
-                    }
+
+                <div className="Flex-Container ">
+                    <div className="Flex-Box">
+                        <div className="Input-Field-Box">
+                            <input placeholder="position" onChange={(e) => { setExperienceDetail({ ...experienceDetail, position: e.target.value }) }} value={experienceDetail?.position} />
+
+                        </div>
+                        <div className="Input-Field-Box">
+                            <input placeholder="institution" onChange={(e) => { setExperienceDetail({ ...experienceDetail, institution: e.target.value }) }} value={experienceDetail?.institution} />
+
+                        </div>
+                        <div className="Input-Field-Box">
+                            <input placeholder="year" onChange={(e) => { setExperienceDetail({ ...experienceDetail, year: e.target.value }) }} value={experienceDetail?.year} />
+                        </div>
+                        <div className="btn-Box">
+                            {!btn?.expBtn ? <button onClick={() => setTeacherInput({ ...teacherInput, experiences: [...teacherInput?.experiences, experienceDetail] })} className="Form-Btn">Save</button> : <button onClick={() => { handleExperienceUpdate(allInd?.eduInd); setBtn({ ...btn, expBtn: false }) }} className="Form-Btn">Update</button>}
+                        </div>
+                    </div>
+
+                    <div>
+                        {
+                            teacherInput?.experiences?.map((data, index) => {
+                                return <div className="cont-flex-box">
+                                    <div><span>{data?.position}</span></div>
+                                    <div><span>{data?.institution}</span></div>
+                                    <div><span>{data?.year}</span></div>
+                                    <button onClick={async () => { setExperienceDetail({ position: data?.position, institution: data?.institution, year: data?.year }); setBtn({ ...btn, expBtn: true }); setAllInd({ ...allInd, expInd: index }) }}>Update</button>
+                                    <button onClick={() => { setTeacherInput({ ...teacherInput, experiences: teacherInput?.experiences?.filter((data, ind) => index !== ind && data) }) }}>Delete</button>
+                                </div>
+                            })
+                        }
+                    </div>
                 </div>
             </div>
-            <div>
-                <h1>Experiences</h1>
-                <input placeholder="position" onChange={(e) => { setExperienceDetail({ ...experienceDetail, position: e.target.value }) }} value={experienceDetail?.position} />
-                <input placeholder="institution" onChange={(e) => { setExperienceDetail({ ...experienceDetail, institution: e.target.value }) }} value={experienceDetail?.institution} />
-                <input placeholder="year" onChange={(e) => { setExperienceDetail({ ...experienceDetail, year: e.target.value }) }} value={experienceDetail?.year} />
-                {!btn?.expBtn ? <button onClick={() => setTeacherInput({ ...teacherInput, experiences: [...teacherInput?.experiences, experienceDetail] })}>Add Experience</button> : <button onClick={() => { handleExperienceUpdate(allInd?.eduInd); setBtn({ ...btn, expBtn: false }) }}>Update Experience</button>}
-                <div>
-                    {
-                        teacherInput?.experiences?.map((data, index) => {
-                            return <div>
-                                <div><span>{data?.position}</span></div>
-                                <div><span>{data?.institution}</span></div>
-                                <div><span>{data?.year}</span></div>
-                                <button onClick={async () => { setExperienceDetail({ position: data?.position, institution: data?.institution, year: data?.year }); setBtn({ ...btn, expBtn: true }); setAllInd({ ...allInd, expInd: index }) }}>Update</button>
-                                <button onClick={() => { setTeacherInput({ ...teacherInput, experiences: teacherInput?.experiences?.filter((data, ind) => index !== ind && data) }) }}>Delete</button>
-                            </div>
-                        })
-                    }
-                </div>
-            </div>
+
             <div className="btn-Box">
 
                 <button onClick={() => { handleTeacher() }} className="Form-Btn">Submit</button>

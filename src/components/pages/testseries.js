@@ -36,7 +36,7 @@ export const TestSeries = () => {
     })
     const getAllTestSeries = async () => {
         try {
-            const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllTest')
+            const res = await axios.get('https://edu-server-side-2023.onrender.com/api/v1/getAllTest')
             if (res?.data?.Tests.length > 0) {
                 setAllTestSeries(res?.data?.Tests)
             }
@@ -49,7 +49,7 @@ export const TestSeries = () => {
     }, []);
     const DeleteTestSeries = async (id) => {
         try {
-            const res = await axios.delete(`https://courseselling.onrender.com/api/v1/deleteTest/${id}`)
+            const res = await axios.delete(`https://edu-server-side-2023.onrender.com/api/v1/deleteTest/${id}`)
             console.log(res)
         } catch (err) {
             console.log(err)
@@ -115,7 +115,7 @@ const TestSeriesForm = ({ id, testSeries , testSeriesInput , setTestSeriesInput}
     })
     const addTestSEries = async (method) => {
         try {
-            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateTest/${id}`, testSeriesInput) : await axios.post(`https://courseselling.onrender.com/api/v1/createTest`, testSeriesInput);
+            let res = (method === 'PUT') ? await axios.put(`https://edu-server-side-2023.onrender.com/api/v1/updateTest/${id}`, testSeriesInput) : await axios.post(`https://edu-server-side-2023.onrender.com/api/v1/createTest`, testSeriesInput);
             if (res) {
                 console.log(res)
             }
@@ -127,7 +127,7 @@ const TestSeriesForm = ({ id, testSeries , testSeriesInput , setTestSeriesInput}
 
     const UpdateTestSeries = async () => {
         try {
-            let res = await axios.put(`https://courseselling.onrender.com/api/v1/updateTest/${id}`, testSeriesInput)
+            let res = await axios.put(`https://edu-server-side-2023.onrender.com/api/v1/updateTest/${id}`, testSeriesInput)
             if (res) {
                 console.log(res)
             }
@@ -181,7 +181,7 @@ const TestSeriesForm = ({ id, testSeries , testSeriesInput , setTestSeriesInput}
                     </div>
                     <div className="Input-Field-Box">
                         <span>Rating</span>
-                        <input placeholder="Rating" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, rating: e.target.value }) }} value={testSeriesInput?.rating} />
+                        <input placeholder="Rating" onChange={(e) => { setTestSeriesInput({ ...testSeriesInput, rating: e.target.value }) }} value={testSeriesInput?.rating} type="number"/>
                     </div>
                 </div>
                 <div className="Input-Field-row">

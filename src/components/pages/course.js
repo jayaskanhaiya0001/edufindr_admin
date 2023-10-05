@@ -45,11 +45,11 @@ export const Course = () => {
         formDataToSend.append('file', file);
         formDataToSend.append('formData', JSON.stringify(courseInput));
         try {
-            let res = (method === 'PUT') ? await axios.put(`https://courseselling.onrender.com/api/v1/updateCourse/${id}`, formDataToSend, {
+            let res = (method === 'PUT') ? await axios.put(`https://edu-server-side-2023.onrender.com/api/v1/updateCourse/${id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-            }) : await axios.post(`https://courseselling.onrender.com/api/v1/createCourse`, formDataToSend, {
+            }) : await axios.post(`https://edu-server-side-2023.onrender.com/api/v1/createCourse`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -110,14 +110,14 @@ export const Course = () => {
         setCourseInput({ ...courseInput, batches: courseInput?.batches?.filter((data, ind) => index !== ind && data) })
     }
     const handleFeatures = (val) => {
-            setCourseInput({ ...courseInput, features: [...courseInput?.features, { description: val}] })
+        setCourseInput({ ...courseInput, features: [...courseInput?.features, { description: val }] })
     };
     const deleteFeatures = (index) => {
         setCourseInput({ ...courseInput, features: courseInput?.features?.filter((data, ind) => index !== ind && data) })
     }
     const getCoursessData = async () => {
         try {
-            const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllcourses')
+            const res = await axios.get('https://edu-server-side-2023.onrender.com/api/v1/getAllcourses')
             if (res?.data?.courses.length > 0) {
                 setAllCourses(res?.data?.courses)
             }
@@ -127,7 +127,7 @@ export const Course = () => {
     };
     const getTeachersData = async () => {
         try {
-            const res = await axios.get('https://courseselling.onrender.com/api/v1/getAllTeachers')
+            const res = await axios.get('https://edu-server-side-2023.onrender.com/api/v1/getAllTeachers')
             console.log(res)
             if (res?.data?.success) {
                 setTeachers(res?.data?.data)
@@ -138,7 +138,7 @@ export const Course = () => {
     };
     const DeleteCourse = async (id) => {
         try {
-            const res = await axios.delete(`https://courseselling.onrender.com/api/v1/deleteCourse/${id}`)
+            const res = await axios.delete(`https://edu-server-side-2023.onrender.com/api/v1/deleteCourse/${id}`)
             console.log(res)
         } catch (err) {
             console.log(err)
@@ -169,7 +169,7 @@ export const Course = () => {
     })
     return (
         <>
-            <div>
+            <div style={{ position: "relative" }}>
 
                 <div className="Grid-Box">
                     <AddItem inputHandle={inputHandle} text={'Add New Course'} />
@@ -206,40 +206,44 @@ export const Course = () => {
                 </div>
 
                 {/* <div> */}
-                {/* <select onChange={(e) => getTeacherIdHandle(e.target.value)}>
-                        <option value="">Choose an option</option>
-                        {teachers.map((data) => (
-                            <option key={data._id} value={data._id}>
-                                {data.name}
-                            </option>
-                        ))}
-                    </select> */}
+
+                <div className="">
+
+                </div>
                 <div className="Form-Input-Box">
                     <div className="Input-Field-row">
                         <div className="Input-Field-Box">
-                            <span>Course Duration</span>
-                            <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
+                            <span>Select Teacher</span>
+                            <select onChange={(e) => getTeacherIdHandle(e.target.value)} className="select_box">
+                                <option value="" className="option">Choose an option</option>
+                                {teachers.map((data) => (
+                                    <option key={data._id} value={data._id} className="option">
+                                        {data.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="Input-Field-Box">
                             <span>Title</span>
                             <input placeholder="title" onChange={(e) => { setCourseInput({ ...courseInput, title: e.target.value }) }} value={courseInput?.title} />
                         </div>
+
                     </div>
 
                     <div className="Input-Field-row">
                         <div className="Input-Field-Box">
-                            <span>Alrady Enrolled</span>
-                            <input placeholder="Alrady Enrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} />
+                            <span>Already Enrolled</span>
+                            <input placeholder="Alrady Enrolled" onChange={(e) => { setCourseInput({ ...courseInput, alreadyEnrolled: e.target.value }) }} value={courseInput?.alreadyEnrolled} type="number"/>
                         </div>
                         <div className="Input-Field-Box">
                             <span>Price</span>
-                            <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} />
+                            <input placeholder="price" onChange={(e) => { setCourseInput({ ...courseInput, price: e.target.value }) }} value={courseInput?.price} type="number"/>
                         </div>
                     </div>
                     <div className="Input-Field-row">
                         <div className="Input-Field-Box">
                             <span>Rating</span>
-                            <input placeholder="Rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} />
+                            <input placeholder="Rating" onChange={(e) => { setCourseInput({ ...courseInput, rating: e.target.value }) }} value={courseInput?.rating} type="number"/>
                         </div>
                         <div className="Input-Field-Box">
                             <span>Batch Start</span>
@@ -286,6 +290,10 @@ export const Course = () => {
                     </div>
                     <div className="Input-Field-row">
                         <ChipInput items={courseInput?.features} handleHighlight={handleFeatures} deletHighlight={deleteFeatures} label={'Features'} />
+                        <div className="Input-Field-Box">
+                            <span>Course Duration</span>
+                            <input placeholder="courseDuration" onChange={(e) => { setCourseInput({ ...courseInput, courseDuration: e.target.value }) }} value={courseInput?.courseDuration} />
+                        </div>
                     </div>
                 </div>
                 <div className="btn-Box">

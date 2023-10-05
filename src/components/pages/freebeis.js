@@ -7,72 +7,72 @@ export const Freebeis = () => {
         freeBees: {
             key: "",
             value: ""
-          }
-        
-      })
+        }
+
+    })
     const [frebeisInfo, setFreebeisInfo] = useState("file");
-    const [allFreebeis , setAllFreebeis] = useState([])
+    const [allFreebeis, setAllFreebeis] = useState([])
     const [toggle, setToggle] = useState({
         key: null,
         boolVal: false
     })
-    const [pdfUrl , setPdfUrl] = useState("")
+    const [pdfUrl, setPdfUrl] = useState("")
 
     const getFileInputValue = (event) => {
         setPdfUrl(URL.createObjectURL(event.target.files[0]))
     }
-      const addFreebeis = async () => {
+    const addFreebeis = async () => {
         try {
 
-            const res = await axios.post(`https://courseselling.onrender.com/api/v1/createFreebees`, freebeisInput)
-            if(res) {
-                console.log(res , "Response")
+            const res = await axios.post(`https://edu-server-side-2023.onrender.com/api/v1/createFreebees`, freebeisInput)
+            if (res) {
+                console.log(res, "Response")
             }
         } catch (err) {
             console.log(err)
         }
-       
-      }
-      const getFreebeis = async () => {
+
+    }
+    const getFreebeis = async () => {
         try {
 
-            const res = await axios.get(`https://courseselling.onrender.com/api/v1/getAllFreebees?filter=${frebeisInfo}`, freebeisInput)
-            if(res) {
-                console.log(res , "Response1")
+            const res = await axios.get(`https://edu-server-side-2023.onrender.com/api/v1/getAllFreebees?filter=${frebeisInfo}`, freebeisInput)
+            if (res) {
+                console.log(res, "Response1")
                 setAllFreebeis(res?.data?.data)
             }
         } catch (err) {
             console.log(err)
         }
-       
-      }
-      const deleteFreebeis = async (id) => {
+
+    }
+    const deleteFreebeis = async (id) => {
         try {
 
-            const res = await axios.get(`https://courseselling.onrender.com/api/v1/deleteFreebees/${id}`)
-            if(res) {
-                console.log(res , "Response1")
+            const res = await axios.get(`https://edu-server-side-2023.onrender.com/api/v1/deleteFreebees/${id}`)
+            if (res) {
+                console.log(res, "Response1")
                 setAllFreebeis(res?.data?.data)
             }
         } catch (err) {
             console.log(err)
         }
-       
-      }
-      useEffect(()=> {
+
+    }
+    useEffect(() => {
         getFreebeis()
-      },[frebeisInfo])
+    }, [frebeisInfo])
     return (
         <>
-        
-        <div>
-        <div className="Grid-Box">
+
+            <div>
+                <div className="Grid-Box">
                     {
                         allFreebeis?.map((data, index) => {
                             return (
                                 <>
                                     <div className="grid-content-cont">
-                                    <div onClick={() => setToggle({ key: index, boolVal: !toggle?.boolVal })}>
+                                        <div onClick={() => setToggle({ key: index, boolVal: !toggle?.boolVal })}>
                                             <span className="kebab-btn" >
 
                                             </span>
@@ -87,7 +87,7 @@ export const Freebeis = () => {
                                                 )
                                             }
                                         </div>
-                                        <img src={'/images/dummy.png'} alt="teacher" style={{ height: "150px", width: "100%" }}/>
+                                        <img src={'/images/dummy.png'} alt="teacher" style={{ height: "150px", width: "100%" }} />
                                         <h3>{data?.about}</h3>
 
                                     </div>
@@ -96,19 +96,33 @@ export const Freebeis = () => {
                         })
                     }
                 </div>
-            <div>
-                <button onClick={() => setFreebeisInfo('file')}>Files</button>
-                <button onClick={() => setFreebeisInfo('video')}>Videos</button>
+                <div>
+                    <button onClick={() => setFreebeisInfo('file')}>Files</button>
+                    <button onClick={() => setFreebeisInfo('video')}>Videos</button>
+                </div>
+                <div className="Form-Input-Box">
+                    <div className="Input-Field-row">
+                        <div className="Input-Field-Box">
+                            <select onChange={(e) => { setFreebeisInput({ ...freebeisInput, freeBees: { ...freebeisInput?.freeBees, key: e.target.value } }) }} className="select_box">
+                                <option value="">Select Your Freebeis</option>
+                                <option value="file">File</option>
+                                <option value="video">Video</option>
+                            </select>
+                        </div>
+                        <div className="Input-Field-Box">
+                            {freebeisInput?.freeBees?.value === "file" && <iframe id="viewer" frameborder="0" width="300" height="200" src={pdfUrl}></iframe>}
+                            <input type="file" onChange={(e) => { setFreebeisInput({ ...freebeisInput, freeBees: { ...freebeisInput?.freeBees, value: e.target.value } }); getFileInputValue(e) }} />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div className="btn-Box">
+                    <button onClick={() => addFreebeis()} className="Form-Btn">Submit</button>
+                </div>
+
             </div>
-            <select onChange={(e) => {setFreebeisInput({...freebeisInput , freeBees: {...freebeisInput?.freeBees, key: e.target.value}})}}>
-                <option value="">Select Your Freebeis</option>
-                <option value="file">File</option>
-                <option value="video">Video</option>
-            </select>
-            <iframe id="viewer" frameborder="0" scrolling="no" width="300" height="200" src={pdfUrl}></iframe>
-            <input type="file" onChange={(e) => {setFreebeisInput({...freebeisInput , freeBees: {...freebeisInput?.freeBees, value: e.target.value}}); getFileInputValue(e)}}/>
-            <button onClick={() => addFreebeis()}>Add Freebeis</button>
-        </div>
         </>
     )
 }

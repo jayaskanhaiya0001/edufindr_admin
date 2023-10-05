@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AddItem } from "../common/Placeholder/add";
-import { useEffect, useState , useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import { TextEditor } from "../common/ckEditor";
 import { FileInput } from "../common/Fields/fileInput";
 // import { ChipInput } from "../common/Fields/chipInput";
@@ -11,9 +11,9 @@ export const Blog = () => {
         content: "",
         author: "",
         tags: [],
-        metaTitle:"",
+        metaTitle: "",
         metaDescription: "",
-        link:""
+        link: ""
     })
     const [toggle, setToggle] = useState({
         key: null,
@@ -25,14 +25,14 @@ export const Blog = () => {
 
     const handleUpdate = (params) => {
         let obj = AllBlogs.filter((data) => params === data?._id && data);
-        if(obj) {
+        if (obj) {
             setBlogInput(obj[0])
         }
     };
-    console.log(blogInput , "BLOG INPUT")
+    console.log(blogInput, "BLOG INPUT")
     const getBlogsData = async () => {
         try {
-            const res = await axios.get(`https://courseselling.onrender.com/api/v1/blogs?tag=${""}`)
+            const res = await axios.get(`https://edu-server-side-2023.onrender.com/api/v1/blogs?tag=${""}`)
             console.log(res)
             if (res?.data?.success) {
                 setAllBLogs(res?.data?.data)
@@ -42,14 +42,14 @@ export const Blog = () => {
         }
     };
     const handleTags = (val) => {
-        setBlogInput((prevState) => ({...prevState, tags:[...prevState?.tags , val]}))
+        setBlogInput((prevState) => ({ ...prevState, tags: [...prevState?.tags, val] }))
     };
     useEffect(() => {
         getBlogsData()
     }, []);
     const DeleteBlog = async (id) => {
         try {
-            const res = await axios.delete(`https://courseselling.onrender.com/api/v1/DeleteBlog/${id}`)
+            const res = await axios.delete(`https://edu-server-side-2023.onrender.com/api/v1/DeleteBlog/${id}`)
             console.log(res)
         } catch (err) {
             console.log(err)
@@ -61,6 +61,9 @@ export const Blog = () => {
             content: "",
             author: "",
             tags: [],
+            metaTitle: "",
+            metaDescription: "",
+            link: ""
         })
         switch (key) {
             case 'ADD':
@@ -72,7 +75,7 @@ export const Blog = () => {
             default:
         }
     };
-    
+
     return (
         <>
 
@@ -92,7 +95,7 @@ export const Blog = () => {
                                                 (toggle.key === index && toggle.boolVal === true) && (
                                                     <>
                                                         <div className="card-btn-box">
-                                                            <button onClick={async () =>{ handleUpdate(data?._id); setId(data?._id)}}>Update</button>
+                                                            <button onClick={async () => { handleUpdate(data?._id); setId(data?._id) }}>Update</button>
                                                             <button onClick={() => DeleteBlog(data?._id)}>Delete</button>
                                                         </div>
                                                     </>
@@ -110,9 +113,9 @@ export const Blog = () => {
                         })
                     }
                 </div>
-               
+
                 <div>
-                    <BlogForm AllBlogs={AllBlogs} id={id} blogInput={blogInput} setBlogInput={setBlogInput} handleTags={handleTags}/>
+                    <BlogForm AllBlogs={AllBlogs} id={id} blogInput={blogInput} setBlogInput={setBlogInput} handleTags={handleTags} />
                 </div>
 
             </div>
@@ -122,7 +125,7 @@ export const Blog = () => {
 
 
 
-const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
+const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput, handleTags }) => {
     console.log(blogInput, "blogInput....")
     const [file, setFile] = useState(null);
     const handleFileChange = (e) => {
@@ -133,7 +136,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
         formDataToSend.append('file', file);
         formDataToSend.append('formData', JSON.stringify(blogInput));
         try {
-            let res = await axios.post(`https://courseselling.onrender.com/api/v1/blog`, formDataToSend, {
+            let res = await axios.post(`https://edu-server-side-2023.onrender.com/api/v1/blog`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -144,6 +147,9 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
                     content: "",
                     author: "",
                     tags: [],
+                    metaTitle: "",
+                    metaDescription: "",
+                    link: ""
                 })
             }
         } catch (err) {
@@ -158,7 +164,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
         formDataToSend.append('formData', JSON.stringify(blogInput));
         try {
 
-            let res = await axios.put(`https://courseselling.onrender.com/api/v1/updateBlogs/${id}`, formDataToSend, {
+            let res = await axios.put(`https://edu-server-side-2023.onrender.com/api/v1/updateBlogs/${id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -169,6 +175,9 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
                     content: "",
                     author: "",
                     tags: [],
+                    metaTitle: "",
+                    metaDescription: "",
+                    link: ""
                 })
             }
         } catch (err) {
@@ -179,7 +188,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
         setBlogInput({ ...blogInput, content: val })
     };
 
-  
+
     const deleteTags = (index) => {
         setBlogInput({ ...blogInput, tags: blogInput?.tags?.filter((data, ind) => index !== ind && data) })
     }
@@ -197,7 +206,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
                         </div>
                         <div className="Input-Field-Box">
                             <span>Link</span>
-                            <input type="text" name="link" placeholder="Optimizing Your Social Media" onChange={(e) => { setBlogInput({ ...blogInput, link: e.target.value }) }} value={blogInput?.link}/>
+                            <input type="text" name="link" placeholder="Optimizing Your Social Media" onChange={(e) => { setBlogInput({ ...blogInput, link: e.target.value }) }} value={blogInput?.link} />
                         </div>
                     </div>
                     <div className="Input-Field-row">
@@ -218,7 +227,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
                         </div>
                         <div className="Input-Field-Box">
                             <span>Meta Description</span>
-                            <input value={blogInput?.metaDescription} name="title" onChange={(e) => { setBlogInput({ ...blogInput, metaDescription: e.target.value }) }} type="text"/>
+                            <input value={blogInput?.metaDescription} name="title" onChange={(e) => { setBlogInput({ ...blogInput, metaDescription: e.target.value }) }} type="text" />
                         </div>
                     </div>
                     <div className="Input-Field-row">
@@ -226,7 +235,7 @@ const BlogForm = ({ AllBlogs, id, setBlogInput, blogInput , handleTags}) => {
                             <span>Author</span>
                             <input placeholder="author" onChange={(e) => { setBlogInput({ ...blogInput, author: e.target.value }) }} value={blogInput?.author} />
                         </div>
-                        <ChipInputs items={blogInput?.tags} handleHighlight={handleTags} deletHighlight={deleteTags}/>
+                        <ChipInputs items={blogInput?.tags} handleHighlight={handleTags} deletHighlight={deleteTags} />
                     </div>
                 </div>
                 <div className="btn-Box">
